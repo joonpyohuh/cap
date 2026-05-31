@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>PlayPICK! | 게이밍/엔터 전자기기 렌탈 서비스</title>
+  <link rel="icon" href="assets/app-icon.png">
+  <link rel="apple-touch-icon" href="assets/app-icon.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <svg class="icon-sprite" aria-hidden="true">
+    <symbol id="icon-home" viewBox="0 0 24 24"><path d="M3 10.8 12 3l9 7.8v9a1 1 0 0 1-1 1h-5.2v-6.4H9.2v6.4H4a1 1 0 0 1-1-1v-9Z"/></symbol>
+    <symbol id="icon-search" viewBox="0 0 24 24"><path d="m21 21-4.35-4.35"/><circle cx="11" cy="11" r="7"/></symbol>
+    <symbol id="icon-user" viewBox="0 0 24 24"><circle cx="12" cy="7.2" r="4"/><path d="M4.8 21c1.2-4.2 3.6-6.2 7.2-6.2s6 2 7.2 6.2"/></symbol>
+    <symbol id="icon-headset" viewBox="0 0 24 24"><path d="M4 13v-1a8 8 0 0 1 16 0v1"/><path d="M4 13.5a2.5 2.5 0 0 1 5 0v2a2.5 2.5 0 0 1-5 0v-2ZM15 13.5a2.5 2.5 0 0 1 5 0v2a2.5 2.5 0 0 1-5 0v-2Z"/><path d="M16.5 19.5H13"/></symbol>
+    <symbol id="icon-grid" viewBox="0 0 24 24"><path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/></symbol>
+    <symbol id="icon-receipt" viewBox="0 0 24 24"><path d="M6 3h12v18l-2-1.2-2 1.2-2-1.2-2 1.2-2-1.2L6 21V3Z"/><path d="M9 8h6M9 12h6M9 16h4"/></symbol>
+    <symbol id="icon-more" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></symbol>
+    <symbol id="icon-gamepad" viewBox="0 0 24 24"><path d="M8 13H5.5m1.25-1.25v2.5M15.5 12.5h.1m2.4 2h.1"/><path d="M7.7 9.5h8.6c2.4 0 4.2 1.8 4.8 5.4.3 2.1-.8 3.5-2.4 3.5-1 0-1.6-.5-2.5-1.6H7.8c-.9 1.1-1.5 1.6-2.5 1.6-1.6 0-2.7-1.4-2.4-3.5.6-3.6 2.4-5.4 4.8-5.4Z"/></symbol>
+    <symbol id="icon-truck" viewBox="0 0 24 24"><path d="M3 6h11v10H3zM14 10h3.5l3.5 3.4V16h-7z"/><circle cx="7" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></symbol>
+    <symbol id="icon-card" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18M7 15h4"/></symbol>
+    <symbol id="icon-check" viewBox="0 0 24 24"><path d="m5 12.5 4.2 4.2L19 7"/></symbol>
+    <symbol id="icon-calendar" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/></symbol>
+    <symbol id="icon-pin" viewBox="0 0 24 24"><path d="M12 21s7-6 7-12a7 7 0 1 0-14 0c0 6 7 12 7 12Z"/><circle cx="12" cy="9" r="2.4"/></symbol>
+    <symbol id="icon-bell" viewBox="0 0 24 24"><path d="M18 9a6 6 0 1 0-12 0c0 7-2 7-2 9h16c0-2-2-2-2-9Z"/><path d="M10 21h4"/></symbol>
+  </svg>
+
+  <div class="app-shell">
+    <header class="top-bar">
+      <div class="brand-lockup" aria-label="PlayPICK!">
+        <img class="app-logo" src="assets/app-icon.png" alt="">
+        <div>
+          <strong><span>Play</span><span>PICK!</span></strong>
+          <small>게이밍/엔터 전자기기 렌탈 서비스</small>
+        </div>
+      </div>
+      <div class="page-context" id="page-context">Home</div>
+      <nav class="header-actions" aria-label="빠른 메뉴">
+        <button class="icon-button" type="button" data-quick="search" aria-label="검색">
+          <svg><use href="#icon-search"></use></svg>
+          <span>검색</span>
+        </button>
+        <button class="icon-button" type="button" data-quick="mypage" aria-label="마이페이지">
+          <svg><use href="#icon-user"></use></svg>
+          <span>마이페이지</span>
+        </button>
+        <button class="icon-button" type="button" data-quick="cs" aria-label="고객센터">
+          <svg><use href="#icon-headset"></use></svg>
+          <span>고객센터</span>
+        </button>
+      </nav>
+    </header>
+
+    <main class="content">
+      <section class="tab-panel active" id="home-tab" data-title="Home">
+        <section class="hero-section">
+          <div class="hero-copy">
+            <p class="eyebrow">이벤트/프로모션</p>
+            <h1>원하는 게임기, 필요한 기간만큼 대여하세요</h1>
+            <p>PlayPICK!에서 VR 기기, 스위치, 플레이스테이션 게임을 필요한 기간만 골라 빌려보세요.</p>
+            <div class="hero-actions">
+              <button class="primary-button" type="button" data-nav="rental-tab">대여품목 보러가기</button>
+              <button class="ghost-button" type="button" data-scroll="process-guide">이용방법 보기</button>
+            </div>
+          </div>
+          <div class="hero-device" aria-hidden="true">
+            <img src="assets/meta-quest.png" alt="">
+          </div>
+        </section>
+
+        <section class="section-block">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">카테고리 바로가기</p>
+              <h2>대여 카테고리</h2>
+            </div>
+            <button class="text-button" type="button" data-nav="rental-tab">전체 보기</button>
+          </div>
+          <div class="category-grid">
+            <button class="category-tile" type="button" data-nav="rental-tab" data-filter="VR 기기">
+              <span class="tile-icon blue"><svg><use href="#icon-gamepad"></use></svg></span>
+              <strong>VR기기</strong>
+              <small>Meta Quest · PICO · Valve Index</small>
+            </button>
+            <button class="category-tile" type="button" data-nav="rental-tab" data-filter="스위치/플스">
+              <span class="tile-icon yellow"><svg><use href="#icon-grid"></use></svg></span>
+              <strong>스위치/플스</strong>
+              <small>스위치 본체 · PS4 · PS5</small>
+            </button>
+          </div>
+        </section>
+
+        <section class="section-block">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">베스트 상품</p>
+              <h2>인기 대여 상품</h2>
+            </div>
+            <span class="pill">1일 요금</span>
+          </div>
+          <div class="product-grid">
+            <article class="product-card" data-product-card data-name="Meta Quest 3" data-price="8,000원" data-category="VR 기기">
+              <img src="assets/meta-quest.png" alt="Meta Quest 3 상품사진">
+              <div>
+                <strong>Meta Quest 3</strong>
+                <span>1일 8,000원</span>
+              </div>
+            </article>
+            <article class="product-card" data-product-card data-name="스위치 본체" data-price="6,000원" data-category="닌텐도 스위치">
+              <img src="assets/nintendo-switch.png" alt="스위치 본체 상품사진">
+              <div>
+                <strong>스위치 본체</strong>
+                <span>1일 6,000원</span>
+              </div>
+            </article>
+            <article class="product-card" data-product-card data-name="동물의 숲" data-price="2,000원" data-category="스위치 게임칩">
+              <img src="assets/animal-crossing.png" alt="동물의 숲 상품사진">
+              <div>
+                <strong>동물의 숲</strong>
+                <span>1일 2,000원</span>
+              </div>
+            </article>
+            <article class="product-card" data-product-card data-name="PS5 게임" data-price="3,000원" data-category="플레이스테이션 게임">
+              <img src="assets/ps5-game.png" alt="PS5 게임 상품사진">
+              <div>
+                <strong>PS5 게임</strong>
+                <span>1일 3,000원</span>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="section-block" id="process-guide">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">신청 절차</p>
+              <h2>대여 절차 안내</h2>
+            </div>
+          </div>
+          <div class="step-flow compact">
+            <article class="step-card"><span>1</span><strong>상품 선택</strong><small>상품 탐색 · 대여품목</small></article>
+            <article class="step-card"><span>2</span><strong>기간 선택</strong><small>1일 / 15일 / 30일</small></article>
+            <article class="step-card"><span>3</span><strong>결제</strong><small>결제 진행 · 결제 완료</small></article>
+            <article class="step-card"><span>4</span><strong>본점 픽업</strong><small>본점 방문 픽업 · 상품 수령</small></article>
+            <article class="step-card"><span>5</span><strong>사용</strong><small>대여 중 이용 · 이용 기간</small></article>
+            <article class="step-card"><span>6</span><strong>반납</strong><small>본점 방문 반납 · 반납 접수</small></article>
+            <article class="step-card"><span>7</span><strong>기기 점검</strong><small>상태 확인 · 반납 완료</small></article>
+          </div>
+        </section>
+
+        <section class="section-block">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">이용 안내 / 공지사항</p>
+              <h2>꼭 확인할 안내</h2>
+            </div>
+          </div>
+          <div class="notice-list">
+            <a href="#rental-tab" data-nav="rental-tab"><strong>대여 기간 안내</strong><span>1일 / 15일 / 30일</span></a>
+            <a href="#more-tab" data-nav="more-tab"><strong>반납 및 픽업 안내</strong><span>본점 방문 수령/반납</span></a>
+            <a href="#more-tab" data-nav="more-tab"><strong>연체/파손 안내</strong><span>연체료 / 파손비 확인</span></a>
+            <a href="#more-tab" data-nav="more-tab"><strong>공지사항</strong><span>최신 소식 및 안내</span></a>
+          </div>
+        </section>
+
+        <section class="sitemap-summary" aria-label="사이트맵 요약">
+          <p class="eyebrow">사이트맵 (SITEMAP)</p>
+          <div class="mini-map">
+            <span>HOME</span>
+            <span>이용안내</span>
+            <span>대여품목</span>
+            <span>대여 서비스</span>
+            <span>반납 및 픽업</span>
+            <span>검색</span>
+            <span>마이페이지</span>
+            <span>고객센터</span>
+          </div>
+        </section>
+
+        <footer class="app-footer">
+          <strong>FOOTER</strong>
+          <p>회사 정보 | 이용약관 | 개인정보처리방침 | 고객센터</p>
+        </footer>
+      </section>
+
+      <section class="tab-panel" id="rental-tab" data-title="대여">
+        <section class="search-card">
+          <label class="search-box" for="product-search">
+            <svg><use href="#icon-search"></use></svg>
+            <input id="product-search" type="search" placeholder="상품 검색 · 키워드 검색" autocomplete="off">
+          </label>
+          <p id="search-status">카테고리별 필터로 원하는 상품을 찾아보세요.</p>
+        </section>
+
+        <div class="filter-tabs" role="tablist" aria-label="카테고리 검색">
+          <button class="active" type="button" data-category-filter="전체">전체</button>
+          <button type="button" data-category-filter="VR 기기">VR 기기</button>
+          <button type="button" data-category-filter="닌텐도 스위치">스위치</button>
+          <button type="button" data-category-filter="스위치 게임칩">게임칩</button>
+          <button type="button" data-category-filter="플레이스테이션 게임">플스</button>
+        </div>
+
+        <section class="section-block">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">검색 결과</p>
+              <h2>상품 리스트</h2>
+            </div>
+          </div>
+          <div class="rental-list" id="rental-list">
+            <article class="rental-row" data-rental-item data-name="Meta Quest 3" data-category="VR 기기" data-price="8,000원">
+              <img src="assets/meta-quest.png" alt="Meta Quest 3 상품사진">
+              <div>
+                <span>VR 기기</span>
+                <strong>Meta Quest 3</strong>
+                <small>1일 8,000원 · 옵션 및 구성품 선택</small>
+              </div>
+              <button type="button">선택</button>
+            </article>
+            <article class="rental-row" data-rental-item data-name="PICO" data-category="VR 기기" data-price="7,000원">
+              <img src="assets/meta-quest.png" alt="PICO 상품사진">
+              <div>
+                <span>VR 기기</span>
+                <strong>PICO</strong>
+                <small>1일 7,000원 · 기타 VR 기기</small>
+              </div>
+              <button type="button">선택</button>
+            </article>
+            <article class="rental-row" data-rental-item data-name="Valve Index" data-category="VR 기기" data-price="12,000원">
+              <img src="assets/valve-index.png" alt="Valve Index 상품사진">
+              <div>
+                <span>VR 기기</span>
+                <strong>Valve Index</strong>
+                <small>1일 12,000원 · HTC Vive와 비교 가능</small>
+              </div>
+              <button type="button">선택</button>
+            </article>
+            <article class="rental-row" data-rental-item data-name="스위치 본체" data-category="닌텐도 스위치" data-price="6,000원">
+              <img src="assets/nintendo-switch.png" alt="스위치 본체 상품사진">
+              <div>
+                <span>닌텐도 스위치</span>
+                <strong>스위치 본체</strong>
+                <small>1일 6,000원 · 액세서리 선택 가능</small>
+              </div>
+              <button type="button">선택</button>
+            </article>
+            <article class="rental-row" data-rental-item data-name="마리오 카트" data-category="스위치 게임칩" data-price="2,000원">
+              <img src="assets/mario-kart.png" alt="마리오 카트 상품사진">
+              <div>
+                <span>스위치 게임칩</span>
+                <strong>마리오 카트</strong>
+                <small>1일 2,000원 · 전체 상품 보기</small>
+              </div>
+              <button type="button">선택</button>
+            </article>
+            <article class="rental-row" data-rental-item data-name="동물의 숲" data-category="스위치 게임칩" data-price="2,000원">
+              <img src="assets/animal-crossing.png" alt="동물의 숲 상품사진">
+              <div>
+                <span>스위치 게임칩</span>
+                <strong>동물의 숲</strong>
+                <small>1일 2,000원 · 젤다의 전설도 준비 중</small>
+              </div>
+              <button type="button">선택</button>
+            </article>
+            <article class="rental-row" data-rental-item data-name="PS5 게임" data-category="플레이스테이션 게임" data-price="3,000원">
+              <img src="assets/ps5-game.png" alt="PS5 게임 상품사진">
+              <div>
+                <span>플레이스테이션 게임</span>
+                <strong>PS5 게임</strong>
+                <small>1일 3,000원 · PS4 게임 포함</small>
+              </div>
+              <button type="button">선택</button>
+            </article>
+          </div>
+        </section>
+
+        <section class="section-block">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">대여 신청 절차</p>
+              <h2>신청 정보 입력</h2>
+            </div>
+            <span class="pill" id="selected-product-pill">상품 선택</span>
+          </div>
+          <form class="rent-form" id="rent-form">
+            <label>
+              <span>상품 선택</span>
+              <input name="product" id="selected-product" value="Meta Quest 3" readonly>
+            </label>
+            <label>
+              <span>대여 가능 여부 조회</span>
+              <select name="period" id="period-select">
+                <option value="1일">1일</option>
+                <option value="15일">15일</option>
+                <option value="30일">30일</option>
+              </select>
+            </label>
+            <label>
+              <span>픽업 일정, 연락처 등</span>
+              <input name="contact" placeholder="예: 오늘 18:00 / 010-0000-0000">
+            </label>
+            <button class="primary-button full" type="submit">결제 진행</button>
+          </form>
+        </section>
+
+        <section class="section-block">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">대여품목 전체 IA</p>
+              <h2>카테고리 검색</h2>
+            </div>
+          </div>
+          <div class="accordion-list">
+            <details open>
+              <summary>VR 기기</summary>
+              <ul><li>Meta Quest</li><li>PICO</li><li>Valve Index</li><li>HTC Vive</li><li>기타 VR 기기</li><li>전체 상품 보기</li></ul>
+            </details>
+            <details>
+              <summary>닌텐도 스위치</summary>
+              <ul><li>스위치 본체</li><li>액세서리</li><li>전체 상품 보기</li></ul>
+            </details>
+            <details>
+              <summary>스위치 게임칩</summary>
+              <ul><li>마리오 카트</li><li>동물의 숲</li><li>젤다의 전설</li><li>기타 게임칩</li><li>전체 상품 보기</li></ul>
+            </details>
+            <details>
+              <summary>플레이스테이션 게임</summary>
+              <ul><li>PS4 게임</li><li>PS5 게임</li><li>전체 상품 보기</li></ul>
+            </details>
+            <details>
+              <summary>전체 상품 보기</summary>
+              <ul><li>모든 상품 목록</li></ul>
+            </details>
+          </div>
+        </section>
+      </section>
+
+      <section class="tab-panel" id="history-tab" data-title="내역">
+        <section class="section-block hero-lite">
+          <div>
+            <p class="eyebrow">마이페이지</p>
+            <h1>대여 내역</h1>
+            <p>진행 중 / 완료 내역과 반납 완료 내역을 확인하세요.</p>
+          </div>
+          <svg><use href="#icon-receipt"></use></svg>
+        </section>
+
+        <div class="segmented-control" aria-label="대여 내역 보기">
+          <button class="active" type="button" data-history-filter="active">진행 중</button>
+          <button type="button" data-history-filter="complete">완료</button>
+        </div>
+
+        <div class="history-list active" data-history-panel="active">
+          <article class="history-card">
+            <span class="status-dot">진행 중</span>
+            <h2>Meta Quest 3</h2>
+            <p>1단계 대여 신청 · 기간 및 수량 확인 완료</p>
+            <div class="progress-track"><span style="width: 58%"></span></div>
+            <div class="quick-links"><button type="button">대여 내역</button><button type="button">결제 수단 관리</button></div>
+          </article>
+          <article class="history-card">
+            <span class="status-dot yellow">픽업 예정</span>
+            <h2>스위치 본체</h2>
+            <p>본점 방문 픽업 · 상품 수령 전 구성품 확인 필요</p>
+            <div class="progress-track"><span style="width: 38%"></span></div>
+            <div class="quick-links"><button type="button">픽업 안내</button><button type="button">문의하기</button></div>
+          </article>
+        </div>
+
+        <div class="history-list" data-history-panel="complete">
+          <article class="history-card">
+            <span class="status-dot green">완료</span>
+            <h2>동물의 숲</h2>
+            <p>반납 완료 내역 · 기기 상태 점검 완료</p>
+            <div class="quick-links"><button type="button">반납 내역</button><button type="button">환불 내역</button></div>
+          </article>
+          <article class="history-card">
+            <span class="status-dot green">완료</span>
+            <h2>PS5 게임</h2>
+            <p>연체/파손 내역 없음 · 답변 및 처리 상태 확인 가능</p>
+            <div class="quick-links"><button type="button">연체/파손 내역</button><button type="button">문의 내역 확인</button></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="tab-panel" id="more-tab" data-title="더보기">
+        <section class="profile-card">
+          <img src="assets/avatar.png" alt="회원 프로필">
+          <div>
+            <p class="eyebrow">회원 정보 관리</p>
+            <h1>플레이픽 회원</h1>
+            <span>이름, 연락처, 주소 등</span>
+          </div>
+          <button type="button">설정</button>
+        </section>
+
+        <section class="section-block">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">마이페이지</p>
+              <h2>내 계정</h2>
+            </div>
+          </div>
+          <div class="menu-list">
+            <button type="button"><span>회원 정보 관리</span><small>이름, 연락처, 주소 등</small></button>
+            <button type="button"><span>결제 수단 관리</span><small>카드/계좌 등록 및 관리</small></button>
+            <button type="button"><span>대여 내역</span><small>진행 중 / 완료 내역</small></button>
+            <button type="button"><span>반납 내역</span><small>반납 완료 내역</small></button>
+            <button type="button"><span>연체/파손 내역</span><small>연체료 / 파손비 확인</small></button>
+            <button type="button"><span>환불 내역</span><small>환불 신청 및 내역</small></button>
+          </div>
+        </section>
+
+        <section class="section-block" id="support-section">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">고객센터</p>
+              <h2>문의와 공지</h2>
+            </div>
+          </div>
+          <div class="menu-list support">
+            <button type="button"><span>자주 묻는 질문 (FAQ)</span><small>질문 & 답변</small></button>
+            <button type="button"><span>문의하기</span><small>1:1 문의 접수</small></button>
+            <button type="button"><span>분실/파손 신고</span><small>신고 접수</small></button>
+            <button type="button"><span>문의 내역 확인</span><small>답변 및 처리 상태 확인</small></button>
+            <button type="button"><span>공지사항</span><small>전체 공지 확인</small></button>
+          </div>
+        </section>
+
+        <section class="section-block">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">이용안내</p>
+              <h2>서비스 정책</h2>
+            </div>
+          </div>
+          <div class="policy-grid">
+            <article><strong>서비스 소개</strong><span>서비스 개요 · 특징 및 장점</span></article>
+            <article><strong>이용 방법 안내</strong><span>대여 절차 · 픽업 절차 · 반납 절차 · 결제 방법 안내</span></article>
+            <article><strong>대여 규정</strong><span>대여 기간 · 연체료 규정 · 파손/분실 규정 · 취소 및 환불 규정</span></article>
+            <article><strong>요금 안내</strong><span>대여 요금표 (1일 / 15일 / 30일)</span></article>
+            <article><strong>기타 안내</strong><span>환불 정책 · 이용약관 · 개인정보처리방침</span></article>
+          </div>
+        </section>
+
+        <section class="section-block">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">반납 및 픽업</p>
+              <h2>방문 안내</h2>
+            </div>
+          </div>
+          <div class="policy-grid pickup">
+            <article><strong>픽업 안내</strong><span>본점 위치 및 운영시간 · 픽업 준비물 안내</span></article>
+            <article><strong>픽업 절차</strong><span>본인 확인 · 구성품 확인 · 픽업 완료</span></article>
+            <article><strong>반납 안내</strong><span>반납 장소 및 운영시간 · 반납 시 유의사항</span></article>
+            <article><strong>반납 절차</strong><span>기기 반납 · 구성품 확인 · 기기 상태 점검</span></article>
+            <article><strong>연체료 안내</strong><span>연체 기준 및 요금</span></article>
+            <article><strong>파손/분실 정책</strong><span>파손/분실 기준 및 비용</span></article>
+          </div>
+        </section>
+
+        <div class="bottom-actions">
+          <button type="button">알림 설정</button>
+          <button type="button">개인정보 처리방침</button>
+          <button type="button">서비스 이용약관</button>
+          <button type="button">로그아웃</button>
+        </div>
+      </section>
+    </main>
+
+    <nav class="bottom-nav" aria-label="하단 메뉴">
+      <button class="active" type="button" data-tab="home-tab">
+        <svg><use href="#icon-home"></use></svg>
+        <span>홈</span>
+      </button>
+      <button type="button" data-tab="rental-tab">
+        <svg><use href="#icon-gamepad"></use></svg>
+        <span>대여</span>
+      </button>
+      <button type="button" data-tab="history-tab">
+        <svg><use href="#icon-receipt"></use></svg>
+        <span>내역</span>
+      </button>
+      <button type="button" data-tab="more-tab">
+        <svg><use href="#icon-more"></use></svg>
+        <span>더보기</span>
+      </button>
+    </nav>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>
