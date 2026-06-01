@@ -1,12 +1,12 @@
 const products = [
-  { name: "Meta Quest 3", type: "VR 기기", category: "VR 기기", price: "1일 8,000원", image: "assets/meta-quest.png" },
-  { name: "PICO 4", type: "VR 기기", category: "VR 기기", price: "1일 7,000원", image: "assets/meta-quest.png" },
-  { name: "Valve Index", type: "VR 기기", category: "VR 기기", price: "1일 12,000원", image: "assets/valve-index.png" },
-  { name: "스위치 본체", type: "스위치/플스", category: "콘솔", price: "1일 6,000원", image: "assets/nintendo-switch.png" },
-  { name: "PS5 게임 세트", type: "스위치/플스", category: "콘솔", price: "1일 3,000원", image: "assets/ps5-game.png" },
-  { name: "마리오 카트", type: "게임 칩", category: "게임 칩", price: "1일 2,000원", image: "assets/mario-kart.png" },
-  { name: "동물의 숲", type: "게임 칩", category: "게임 칩", price: "1일 2,000원", image: "assets/animal-crossing.png" },
-  { name: "젤다의 전설", type: "게임 칩", category: "게임 칩", price: "1일 2,500원", image: "assets/animal-crossing.png" }
+  { id: "meta-quest-3", name: "Meta Quest 3", type: "VR 기기", category: "VR 기기", price: "1일 8,000원", kit: "본체, 컨트롤러 2개, 충전 케이블", description: "몰입감 있는 VR 경험을 즐길 수 있는 대표 기기입니다. 가벼운 착용감과 선명한 화면으로 체험형 게임에 적합합니다.", image: "assets/meta-quest.png" },
+  { id: "pico-4", name: "PICO 4", type: "VR 기기", category: "VR 기기", price: "1일 7,000원", kit: "본체, 컨트롤러 2개, 안면 패드, 충전 케이블", description: "간단한 설정으로 VR 콘텐츠를 즐길 수 있는 실속형 VR 기기입니다.", image: "assets/meta-quest.png" },
+  { id: "valve-index", name: "Valve Index", type: "VR 기기", category: "VR 기기", price: "1일 12,000원", kit: "헤드셋, 컨트롤러, 베이스 스테이션", description: "정밀한 트래킹과 높은 몰입감을 원하는 사용자에게 적합한 프리미엄 VR 기기입니다.", image: "assets/valve-index.png" },
+  { id: "nintendo-switch", name: "스위치 본체", type: "스위치/플스", category: "콘솔", price: "1일 6,000원", kit: "본체, 조이콘, 독, HDMI 케이블, 충전기", description: "가족, 친구와 함께 즐기기 좋은 콘솔입니다. TV 연결과 휴대 모드를 모두 지원합니다.", image: "assets/nintendo-switch.png" },
+  { id: "ps5-game-set", name: "PS5 게임 세트", type: "스위치/플스", category: "콘솔", price: "1일 3,000원", kit: "게임 타이틀, 보관 케이스", description: "플레이스테이션 인기 타이틀을 필요한 기간만 골라 이용할 수 있습니다.", image: "assets/ps5-game.png" },
+  { id: "mario-kart", name: "마리오 카트", type: "게임 칩", category: "게임 칩", price: "1일 2,000원", kit: "게임 칩, 케이스", description: "여럿이 함께 즐기기 좋은 대표 레이싱 게임입니다.", image: "assets/mario-kart.png" },
+  { id: "animal-crossing", name: "동물의 숲", type: "게임 칩", category: "게임 칩", price: "1일 2,000원", kit: "게임 칩, 케이스", description: "편안한 분위기의 섬 생활을 즐길 수 있는 인기 타이틀입니다.", image: "assets/animal-crossing.png" },
+  { id: "zelda", name: "젤다의 전설", type: "게임 칩", category: "게임 칩", price: "1일 2,500원", kit: "게임 칩, 케이스", description: "모험과 퍼즐을 좋아하는 사용자에게 추천하는 액션 어드벤처 게임입니다.", image: "assets/animal-crossing.png" }
 ];
 
 const rentalSteps = [
@@ -32,6 +32,7 @@ const routeLinks = [...document.querySelectorAll("[data-route]")];
 const header = document.querySelector(".site-header");
 const menuToggle = document.querySelector(".menu-toggle");
 const toast = document.querySelector(".toast");
+let selectedProduct = products[0];
 let toastTimer;
 
 function icon(id) {
@@ -53,7 +54,7 @@ function productCard(product) {
         <span class="type">${product.type}</span>
         <strong>${product.name}</strong>
         <span class="price">${product.price}</span>
-        <button type="button" data-reservation-disabled>상세보기</button>
+        <button type="button" data-detail-product="${product.id}">상세보기</button>
       </div>
     </article>
   `;
@@ -85,6 +86,21 @@ function renderSteps() {
   document.querySelector(".service-steps").innerHTML = serviceSteps.map(processStep).join("");
 }
 
+function renderDetail(product = selectedProduct) {
+  selectedProduct = product;
+  document.querySelector(".detail-image").src = product.image;
+  document.querySelector(".detail-image").alt = `${product.name} 상세 이미지`;
+  document.querySelector(".detail-type").textContent = product.type;
+  document.querySelector(".detail-name").textContent = product.name;
+  document.querySelector(".detail-description").textContent = product.description;
+  document.querySelector(".detail-price").textContent = product.price.replace("1일 ", "");
+  document.querySelector(".detail-kit").textContent = product.kit;
+  document.querySelector(".form-product-label").textContent = product.name;
+  document.querySelector(".rental-form-section").hidden = true;
+  document.querySelector(".completion-panel").hidden = true;
+  document.querySelector(".rental-form")?.reset();
+}
+
 function setRoute(route, shouldScroll = true) {
   const safeRoute = document.querySelector(`[data-page="${route}"]`) ? route : "home";
   pages.forEach((page) => page.classList.toggle("active", page.dataset.page === safeRoute));
@@ -113,15 +129,51 @@ function filterSearch() {
     : "전체 상품을 표시 중입니다.";
 }
 
+function showRentalComplete() {
+  const formSection = document.querySelector(".rental-form-section");
+  const completion = document.querySelector(".completion-panel");
+  formSection.hidden = true;
+  completion.hidden = false;
+  completion.querySelector(".complete-summary").textContent = `${selectedProduct.name} 대여 신청이 접수되었습니다. 담당자가 대여 가능 여부를 확인한 뒤 안내드릴 예정입니다.`;
+  completion.scrollIntoView({ behavior: "smooth", block: "center" });
+  showToast("신청 완료했습니다.");
+}
+
+function submitRentalForm(form) {
+  if (!form.checkValidity()) {
+    form.reportValidity();
+    return;
+  }
+  showRentalComplete();
+}
+
 document.addEventListener("click", (event) => {
+  const detailButton = event.target.closest("[data-detail-product]");
+  if (detailButton) {
+    const product = products.find((item) => item.id === detailButton.dataset.detailProduct) || products[0];
+    renderDetail(product);
+    setRoute("detail");
+  }
+
+  const rentStartButton = event.target.closest(".rent-start-button");
+  if (rentStartButton) {
+    const formSection = document.querySelector(".rental-form-section");
+    const completion = document.querySelector(".completion-panel");
+    completion.hidden = true;
+    formSection.hidden = false;
+    formSection.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  const submitButton = event.target.closest(".submit-rental-button");
+  if (submitButton) {
+    event.preventDefault();
+    submitRentalForm(submitButton.closest("form"));
+  }
+
   const routeLink = event.target.closest("[data-route]");
   if (routeLink) {
     event.preventDefault();
     setRoute(routeLink.dataset.route);
-  }
-
-  if (event.target.closest("[data-reservation-disabled]")) {
-    showToast("대여예약/결제 페이지는 이번 제작 범위에서 제외되었습니다.");
   }
 });
 
@@ -135,6 +187,12 @@ window.addEventListener("hashchange", () => {
 
 renderProducts();
 renderSteps();
+renderDetail(selectedProduct);
 setRoute(location.hash.slice(1) || "home", false);
 
 document.querySelector("#product-search")?.addEventListener("input", filterSearch);
+
+document.querySelector(".rental-form")?.addEventListener("submit", (event) => {
+  event.preventDefault();
+  submitRentalForm(event.currentTarget);
+});

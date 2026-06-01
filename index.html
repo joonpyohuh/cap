@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>PlayPICK! | 게이밍/엔터 전자기기 렌탈 서비스</title>
   <link rel="icon" href="assets/app-icon.png">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=4">
 </head>
 <body>
   <svg class="icon-sprite" aria-hidden="true">
@@ -214,6 +214,77 @@
       <section class="wire-section"><div class="product-grid category-products" data-category="게임 칩"></div></section>
     </section>
 
+    <section class="page" id="page-detail" data-page="detail">
+      <section class="page-hero detail-hero">
+        <h1>상세보기</h1>
+        <p>선택한 상품의 구성과 요금을 확인한 뒤 대여정보를 작성하세요.</p>
+      </section>
+      <section class="wire-section product-detail-shell">
+        <div class="detail-media">
+          <img class="detail-image" src="assets/meta-quest.png" alt="상품 상세 이미지">
+        </div>
+        <div class="detail-info">
+          <span class="detail-type">VR 기기</span>
+          <h2 class="detail-name">Meta Quest 3</h2>
+          <p class="detail-description">몰입감 있는 VR 경험을 즐길 수 있는 대표 기기입니다.</p>
+          <div class="detail-meta">
+            <div><strong>1일 요금</strong><span class="detail-price">8,000원</span></div>
+            <div><strong>구성품</strong><span class="detail-kit">본체, 컨트롤러, 충전 케이블</span></div>
+            <div><strong>픽업</strong><span>PlayPICK! 본점 방문 수령</span></div>
+          </div>
+          <button class="button primary rent-start-button" type="button">대여하기</button>
+        </div>
+      </section>
+
+      <section class="wire-section rental-form-section" hidden>
+        <div class="section-title-row">
+          <h2>대여정보 작성</h2>
+          <span class="form-product-label">Meta Quest 3</span>
+        </div>
+        <form class="rental-form">
+          <label>
+            <span>이름</span>
+            <input name="name" autocomplete="name" placeholder="홍길동" required>
+          </label>
+          <label>
+            <span>연락처</span>
+            <input name="phone" autocomplete="tel" placeholder="010-0000-0000" required>
+          </label>
+          <label>
+            <span>대여 기간</span>
+            <select name="period" required>
+              <option value="1일">1일</option>
+              <option value="7일">7일</option>
+              <option value="15일">15일</option>
+              <option value="30일">30일</option>
+            </select>
+          </label>
+          <label>
+            <span>픽업 희망일</span>
+            <input name="pickupDate" type="date" required>
+          </label>
+          <label class="full-field">
+            <span>요청사항</span>
+            <textarea name="memo" rows="4" placeholder="필요한 구성품이나 방문 예정 시간을 적어주세요."></textarea>
+          </label>
+          <button class="button primary submit-rental-button" type="submit">신청하기</button>
+        </form>
+      </section>
+
+      <section class="completion-panel" hidden>
+        <div class="success-mark" aria-hidden="true">
+          <svg><use href="#icon-check"></use></svg>
+        </div>
+        <p class="complete-kicker">대여 신청</p>
+        <h2>신청 완료했습니다</h2>
+        <p class="complete-summary">담당자가 대여 가능 여부를 확인한 뒤 안내드릴 예정입니다.</p>
+        <div class="complete-actions">
+          <a class="button primary" href="#products" data-route="products">다른 상품 보기</a>
+          <a class="button secondary" href="#pickup" data-route="pickup">픽업 안내 보기</a>
+        </div>
+      </section>
+    </section>
+
     <section class="page" id="page-service" data-page="service">
       <section class="page-hero service-hero">
         <h1>대여 서비스</h1>
@@ -367,6 +438,6 @@
   </footer>
 
   <div class="toast" role="status" aria-live="polite"></div>
-  <script src="script.js"></script>
+  <script src="script.js?v=4"></script>
 </body>
 </html>

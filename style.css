@@ -432,6 +432,248 @@ main {
   min-height: 2.7rem;
 }
 
+.product-card button:hover,
+.product-card button:focus-visible,
+.button:hover,
+.button:focus-visible {
+  transform: translateY(-1px);
+}
+
+.product-detail-shell {
+  align-items: center;
+  display: grid;
+  gap: 3rem;
+  grid-template-columns: minmax(0, 1.05fr) minmax(22rem, 0.95fr);
+}
+
+.detail-media {
+  background: linear-gradient(135deg, #eef7ff, #fff9c9);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+  padding: 2rem;
+}
+
+.detail-image {
+  aspect-ratio: 4 / 3;
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  object-fit: cover;
+  width: 100%;
+}
+
+.detail-info {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.detail-type {
+  color: var(--blue);
+  font-size: 1rem;
+  font-weight: 950;
+}
+
+.detail-info h2 {
+  font-size: clamp(2.2rem, 4vw, 3.5rem);
+  margin: 0;
+}
+
+.detail-description {
+  color: var(--muted);
+  font-size: 1.15rem;
+  font-weight: 800;
+  line-height: 1.65;
+  margin: 0;
+}
+
+.detail-meta {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.detail-meta div {
+  display: grid;
+  grid-template-columns: 8rem minmax(0, 1fr);
+}
+
+.detail-meta div + div {
+  border-top: 1px solid var(--line);
+}
+
+.detail-meta strong,
+.detail-meta span {
+  align-items: center;
+  display: flex;
+  min-height: 3.7rem;
+  padding: 0.9rem 1rem;
+}
+
+.detail-meta strong {
+  background: var(--soft);
+  justify-content: center;
+}
+
+.detail-meta span {
+  color: #26303d;
+  font-weight: 850;
+}
+
+.rent-start-button {
+  justify-self: start;
+  min-width: 12rem;
+}
+
+.rental-form-section {
+  animation: sectionReveal 360ms ease both;
+}
+
+.form-product-label {
+  background: #edf4ff;
+  border-radius: 999px;
+  color: var(--blue);
+  font-weight: 950;
+  padding: 0.55rem 0.9rem;
+}
+
+.rental-form {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.rental-form label {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.rental-form label span {
+  color: #20242b;
+  font-weight: 950;
+}
+
+.rental-form input,
+.rental-form select,
+.rental-form textarea {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font: inherit;
+  min-height: 3.2rem;
+  outline: 0;
+  padding: 0.8rem 0.9rem;
+  width: 100%;
+}
+
+.rental-form textarea {
+  resize: vertical;
+}
+
+.rental-form input:focus,
+.rental-form select:focus,
+.rental-form textarea:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 4px rgba(11, 92, 255, 0.12);
+}
+
+.full-field,
+.submit-rental-button {
+  grid-column: 1 / -1;
+}
+
+.submit-rental-button {
+  justify-self: start;
+  min-width: 12rem;
+}
+
+.completion-panel {
+  align-items: center;
+  border: 1px solid #bcd4ff;
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 30% 15%, rgba(254, 229, 0, 0.32), transparent 20rem),
+    linear-gradient(135deg, #f6fbff, #ffffff);
+  display: grid;
+  justify-items: center;
+  margin-bottom: 3rem;
+  min-height: 27rem;
+  overflow: hidden;
+  padding: 4rem 2rem;
+  position: relative;
+  text-align: center;
+}
+
+.completion-panel::before,
+.completion-panel::after {
+  animation: confettiDrift 1200ms ease-out both;
+  color: var(--blue);
+  content: "";
+  height: 0.65rem;
+  position: absolute;
+  width: 0.65rem;
+}
+
+.completion-panel::before {
+  box-shadow: -18rem 3rem 0 var(--yellow), -12rem -5rem 0 var(--blue), 10rem -4rem 0 var(--yellow), 18rem 4rem 0 var(--blue);
+  top: 30%;
+}
+
+.completion-panel::after {
+  animation-delay: 120ms;
+  box-shadow: -15rem -1rem 0 #5bd4c5, -7rem 5rem 0 var(--blue), 8rem 5rem 0 #5bd4c5, 15rem -2rem 0 var(--yellow);
+  top: 45%;
+}
+
+.success-mark {
+  align-items: center;
+  animation: successPop 560ms cubic-bezier(.2, 1.35, .35, 1) both;
+  background: var(--blue);
+  border-radius: 999px;
+  color: #ffffff;
+  display: inline-flex;
+  height: 6rem;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  width: 6rem;
+}
+
+.success-mark svg {
+  animation: checkDraw 700ms ease 230ms both;
+  height: 3.2rem;
+  stroke-dasharray: 48;
+  stroke-dashoffset: 48;
+  width: 3.2rem;
+}
+
+.complete-kicker {
+  color: var(--blue);
+  font-weight: 950;
+  margin: 0 0 0.5rem;
+}
+
+.completion-panel h2 {
+  animation: riseIn 420ms ease 180ms both;
+  font-size: clamp(2.2rem, 4vw, 3.4rem);
+  margin: 0 0 0.85rem;
+}
+
+.complete-summary {
+  animation: riseIn 420ms ease 260ms both;
+  color: var(--muted);
+  font-size: 1.1rem;
+  font-weight: 800;
+  line-height: 1.65;
+  margin: 0;
+}
+
+.complete-actions {
+  animation: riseIn 420ms ease 340ms both;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+  margin-top: 1.8rem;
+}
+
 .simple-flow {
   align-items: center;
   display: flex;
@@ -931,6 +1173,63 @@ main {
   transform: translate(-50%, 0);
 }
 
+@keyframes sectionReveal {
+  from {
+    opacity: 0;
+    transform: translateY(1rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes successPop {
+  0% {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes checkDraw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes riseIn {
+  from {
+    opacity: 0;
+    transform: translateY(0.8rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes confettiDrift {
+  from {
+    opacity: 0;
+    transform: translateY(-1.5rem) rotate(0deg);
+  }
+  35% {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    transform: translateY(4rem) rotate(28deg);
+  }
+}
+
 @media (max-width: 1040px) {
   .nav-row {
     grid-template-columns: 1fr;
@@ -958,7 +1257,8 @@ main {
   .service-card-grid,
   .icon-info-grid,
   .dashboard-grid,
-  .support-grid {
+  .support-grid,
+  .product-detail-shell {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -1072,7 +1372,8 @@ main {
   }
 
   .rule-table div,
-  .pricing-table div {
+  .pricing-table div,
+  .detail-meta div {
     grid-template-columns: 1fr;
   }
 
@@ -1089,6 +1390,22 @@ main {
     align-items: flex-start;
     margin-bottom: 1.25rem;
     padding: 1.5rem;
+  }
+
+  .product-detail-shell,
+  .rental-form {
+    grid-template-columns: 1fr;
+  }
+
+  .rent-start-button,
+  .submit-rental-button {
+    justify-self: stretch;
+  }
+
+  .completion-panel {
+    margin-bottom: 1.25rem;
+    min-height: 23rem;
+    padding: 3rem 1.5rem;
   }
 
   .site-footer {
