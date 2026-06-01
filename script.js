@@ -1,4 +1,4 @@
-const products = [
+const fallbackProducts = [
   { id: "meta-quest-3", name: "Meta Quest 3", type: "VR 기기", category: "VR 기기", price: "1일 8,000원", kit: "본체, 컨트롤러 2개, 충전 케이블", description: "몰입감 있는 VR 경험을 즐길 수 있는 대표 기기입니다. 가벼운 착용감과 선명한 화면으로 체험형 게임에 적합합니다.", image: "assets/meta-quest.png" },
   { id: "pico-4", name: "PICO 4", type: "VR 기기", category: "VR 기기", price: "1일 7,000원", kit: "본체, 컨트롤러 2개, 안면 패드, 충전 케이블", description: "간단한 설정으로 VR 콘텐츠를 즐길 수 있는 실속형 VR 기기입니다.", image: "assets/meta-quest.png" },
   { id: "valve-index", name: "Valve Index", type: "VR 기기", category: "VR 기기", price: "1일 12,000원", kit: "헤드셋, 컨트롤러, 베이스 스테이션", description: "정밀한 트래킹과 높은 몰입감을 원하는 사용자에게 적합한 프리미엄 VR 기기입니다.", image: "assets/valve-index.png" },
@@ -8,6 +8,10 @@ const products = [
   { id: "animal-crossing", name: "동물의 숲", type: "게임 칩", category: "게임 칩", price: "1일 2,000원", kit: "게임 칩, 케이스", description: "편안한 분위기의 섬 생활을 즐길 수 있는 인기 타이틀입니다.", image: "assets/animal-crossing.png" },
   { id: "zelda", name: "젤다의 전설", type: "게임 칩", category: "게임 칩", price: "1일 2,500원", kit: "게임 칩, 케이스", description: "모험과 퍼즐을 좋아하는 사용자에게 추천하는 액션 어드벤처 게임입니다.", image: "assets/animal-crossing.png" }
 ];
+
+const products = Array.isArray(window.PLAYPICK_PRODUCTS) && window.PLAYPICK_PRODUCTS.length
+  ? window.PLAYPICK_PRODUCTS
+  : fallbackProducts;
 
 const rentalSteps = [
   ["상품 선택", "대여할 상품을 선택합니다.", "icon-vr"],
@@ -39,6 +43,57 @@ function icon(id) {
   return `<svg aria-hidden="true"><use href="#${id}"></use></svg>`;
 }
 
+function escapeHtml(value = "") {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+function compactProductText(product) {
+  return [
+    product.name,
+    product.type,
+    product.category,
+    product.platform,
+    product.genre,
+    product.brand,
+    product.model,
+    product.code,
+    product.feature,
+  ].filter(Boolean).join(" ");
+}
+
+function productSpecItems(product) {
+  const priceRows = product.prices
+    ? [
+        ["1일 요금", product.prices.day],
+        ["15일 요금", product.prices.fifteen],
+        ["30일 요금", product.prices.thirty],
+      ]
+    : [];
+
+  return [
+    ["상품 코드", product.code],
+    ["브랜드", product.brand],
+    ["모델명", product.model],
+    ["보유 수량", product.stock],
+    ["특징", product.feature],
+    ["플랫폼", product.platform],
+    ["장르", product.genre],
+    ["이용가", product.age],
+    ["인원수", product.players],
+    ["메인 스토리", product.timeMain ? `${product.timeMain}시간` : ""],
+    ["완벽 클리어", product.timeClear ? `${product.timeClear}시간` : ""],
+    ["출시일", product.releaseDate],
+    ["메타스코어", product.metascore],
+    ...priceRows,
+    ["제품 번호", product.codes],
+  ].filter(([, value]) => value);
+}
+
 function showToast(message) {
   window.clearTimeout(toastTimer);
   toast.textContent = message;
@@ -48,13 +103,13 @@ function showToast(message) {
 
 function productCard(product) {
   return `
-    <article class="product-card" data-product="${product.name} ${product.type}">
-      <img src="${product.image}" alt="${product.name} 상품사진">
+    <article class="product-card" data-product="${escapeHtml(compactProductText(product))}">
+      <img src="${escapeHtml(product.image)}" alt="${escapeHtml(product.name)} 상품 사진">
       <div class="product-card-body">
-        <span class="type">${product.type}</span>
-        <strong>${product.name}</strong>
-        <span class="price">${product.price}</span>
-        <button type="button" data-detail-product="${product.id}">상세보기</button>
+        <span class="type">${escapeHtml(product.type)}</span>
+        <strong>${escapeHtml(product.name)}</strong>
+        <span class="price">${escapeHtml(product.price)}</span>
+        <button type="button" data-detail-product="${escapeHtml(product.id)}">상세보기</button>
       </div>
     </article>
   `;
@@ -65,8 +120,8 @@ function renderProducts() {
   document.querySelectorAll(".popular-products").forEach((target) => target.innerHTML = popular);
   document.querySelectorAll(".all-products, .search-products").forEach((target) => target.innerHTML = products.map(productCard).join(""));
   document.querySelectorAll(".category-products").forEach((target) => {
-    const category = target.dataset.category;
-    target.innerHTML = products.filter((product) => product.category === category).map(productCard).join("");
+    const categories = target.dataset.category.split(",").map((category) => category.trim());
+    target.innerHTML = products.filter((product) => categories.includes(product.category)).map(productCard).join("");
   });
 }
 
@@ -93,8 +148,17 @@ function renderDetail(product = selectedProduct) {
   document.querySelector(".detail-type").textContent = product.type;
   document.querySelector(".detail-name").textContent = product.name;
   document.querySelector(".detail-description").textContent = product.description;
-  document.querySelector(".detail-price").textContent = product.price.replace("1일 ", "");
+  document.querySelector(".detail-price").textContent = product.prices?.day || product.price.replace("1일 ", "");
   document.querySelector(".detail-kit").textContent = product.kit;
+  const detailSpecs = document.querySelector(".detail-specs");
+  if (detailSpecs) {
+    detailSpecs.innerHTML = productSpecItems(product).map(([label, value]) => `
+      <div>
+        <strong>${escapeHtml(label)}</strong>
+        <span>${escapeHtml(value)}</span>
+      </div>
+    `).join("");
+  }
   document.querySelector(".form-product-label").textContent = product.name;
   document.querySelector(".rental-form-section").hidden = true;
   document.querySelector(".completion-panel").hidden = true;

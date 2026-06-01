@@ -519,6 +519,36 @@ main {
   font-weight: 850;
 }
 
+.detail-specs {
+  display: grid;
+  gap: 0.65rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.detail-specs div {
+  background: #f8fbff;
+  border: 1px solid #dce8fb;
+  border-radius: 8px;
+  display: grid;
+  gap: 0.25rem;
+  min-height: 4.4rem;
+  padding: 0.85rem 0.95rem;
+}
+
+.detail-specs strong {
+  color: #546174;
+  font-size: 0.78rem;
+  font-weight: 950;
+}
+
+.detail-specs span {
+  color: #111827;
+  font-size: 0.95rem;
+  font-weight: 850;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
 .rent-start-button {
   justify-self: start;
   min-width: 12rem;
@@ -1393,6 +1423,7 @@ main {
   }
 
   .product-detail-shell,
+  .detail-specs,
   .rental-form {
     grid-template-columns: 1fr;
   }
