@@ -193,6 +193,7 @@ main {
 }
 
 .page.active {
+  animation: pageFadeIn 360ms ease both;
   display: block;
 }
 
@@ -1207,6 +1208,17 @@ main {
   from {
     opacity: 0;
     transform: translateY(1rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pageFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(0.85rem);
   }
   to {
     opacity: 1;

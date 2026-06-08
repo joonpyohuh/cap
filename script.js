@@ -160,8 +160,6 @@ function renderDetail(product = selectedProduct) {
     `).join("");
   }
   document.querySelector(".form-product-label").textContent = product.name;
-  document.querySelector(".rental-form-section").hidden = true;
-  document.querySelector(".completion-panel").hidden = true;
   document.querySelector(".rental-form")?.reset();
 }
 
@@ -194,13 +192,10 @@ function filterSearch() {
 }
 
 function showRentalComplete() {
-  const formSection = document.querySelector(".rental-form-section");
   const completion = document.querySelector(".completion-panel");
-  formSection.hidden = true;
-  completion.hidden = false;
   completion.querySelector(".complete-summary").textContent = `${selectedProduct.name} 대여 신청이 접수되었습니다. 담당자가 대여 가능 여부를 확인한 뒤 안내드릴 예정입니다.`;
-  completion.scrollIntoView({ behavior: "smooth", block: "center" });
-  showToast("신청 완료했습니다.");
+  setRoute("complete");
+  showToast("신청되었습니다!");
 }
 
 function submitRentalForm(form) {
@@ -221,11 +216,8 @@ document.addEventListener("click", (event) => {
 
   const rentStartButton = event.target.closest(".rent-start-button");
   if (rentStartButton) {
-    const formSection = document.querySelector(".rental-form-section");
-    const completion = document.querySelector(".completion-panel");
-    completion.hidden = true;
-    formSection.hidden = false;
-    formSection.scrollIntoView({ behavior: "smooth", block: "start" });
+    document.querySelector(".form-product-label").textContent = selectedProduct.name;
+    setRoute("rental");
   }
 
   const submitButton = event.target.closest(".submit-rental-button");

@@ -217,7 +217,7 @@
     <section class="page" id="page-detail" data-page="detail">
       <section class="page-hero detail-hero">
         <h1>상세보기</h1>
-        <p>선택한 상품의 구성과 요금을 확인한 뒤 대여정보를 작성하세요.</p>
+        <p>선택한 상품의 구성과 요금을 확인한 뒤 대여를 진행하세요.</p>
       </section>
       <section class="wire-section product-detail-shell">
         <div class="detail-media">
@@ -236,8 +236,14 @@
           <button class="button primary rent-start-button" type="button">대여하기</button>
         </div>
       </section>
+    </section>
 
-      <section class="wire-section rental-form-section" hidden>
+    <section class="page" id="page-rental" data-page="rental">
+      <section class="page-hero rental-hero">
+        <h1>대여정보 작성</h1>
+        <p>픽업 일정과 연락처를 작성하면 신청이 접수됩니다.</p>
+      </section>
+      <section class="wire-section rental-form-section">
         <div class="section-title-row">
           <h2>대여정보 작성</h2>
           <span class="form-product-label">Meta Quest 3</span>
@@ -271,13 +277,15 @@
           <button class="button primary submit-rental-button" type="submit">신청하기</button>
         </form>
       </section>
+    </section>
 
-      <section class="completion-panel" hidden>
+    <section class="page" id="page-complete" data-page="complete">
+      <section class="completion-panel">
         <div class="success-mark" aria-hidden="true">
           <svg><use href="#icon-check"></use></svg>
         </div>
         <p class="complete-kicker">대여 신청</p>
-        <h2>신청 완료했습니다</h2>
+        <h2>신청되었습니다!</h2>
         <p class="complete-summary">담당자가 대여 가능 여부를 확인한 뒤 안내드릴 예정입니다.</p>
         <div class="complete-actions">
           <a class="button primary" href="#products" data-route="products">다른 상품 보기</a>
