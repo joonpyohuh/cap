@@ -763,12 +763,14 @@ main {
 }
 
 .admin-stat-grid,
+.mypage-stat-grid,
 .admin-entity-grid {
   display: grid;
   gap: 1rem;
 }
 
-.admin-stat-grid {
+.admin-stat-grid,
+.mypage-stat-grid {
   grid-template-columns: repeat(5, minmax(0, 1fr));
 }
 
@@ -863,6 +865,41 @@ main {
   color: var(--muted);
   font-size: 0.82rem;
   margin-top: 0.25rem;
+}
+
+.mypage-profile-card {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.mypage-profile-card article {
+  background: #ffffff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  display: grid;
+  gap: 0.5rem;
+  min-height: 6.5rem;
+  padding: 1rem;
+}
+
+.mypage-profile-card span {
+  color: var(--blue);
+  font-size: 0.8rem;
+  font-weight: 950;
+}
+
+.mypage-profile-card strong {
+  color: #111827;
+  font-size: 1rem;
+  font-weight: 950;
+  overflow-wrap: anywhere;
+}
+
+.empty-table-cell {
+  color: var(--muted);
+  font-weight: 900;
+  text-align: center;
 }
 
 .status-badge {
@@ -1453,7 +1490,9 @@ main {
   .dashboard-grid,
   .support-grid,
   .admin-stat-grid,
+  .mypage-stat-grid,
   .admin-entity-grid,
+  .mypage-profile-card,
   .product-detail-shell {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -1560,7 +1599,9 @@ main {
   .service-card-grid,
   .icon-info-grid,
   .admin-stat-grid,
+  .mypage-stat-grid,
   .admin-entity-grid,
+  .mypage-profile-card,
   .prep-grid > div,
   .dashboard-grid,
   .support-grid,

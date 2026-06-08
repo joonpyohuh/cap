@@ -31,14 +31,14 @@ const serviceSteps = [
   ["결제 진행", "결제 방법 및 결제 수단", "icon-card"]
 ];
 
-const adminUsers = [
+let adminUsers = [
   { userId: "U-1001", name: "김민지", email: "minji@playpick.kr", phone: "010-3482-1900", birth: "1998.04.12", createdAt: "2026.05.18" },
   { userId: "U-1002", name: "박도윤", email: "doyun@playpick.kr", phone: "010-7744-2201", birth: "2001.09.07", createdAt: "2026.05.22" },
   { userId: "U-1003", name: "이서연", email: "seoyeon@playpick.kr", phone: "010-9013-4472", birth: "1997.12.03", createdAt: "2026.05.28" },
   { userId: "U-1004", name: "최준호", email: "junho@playpick.kr", phone: "010-5520-1188", birth: "1999.02.19", createdAt: "2026.06.01" }
 ];
 
-const adminRentals = [
+let adminRentals = [
   { rentalId: "R-202606-001", userId: "U-1001", productNumber: "MQ-03-2312-001", productName: "Meta Quest 3", orderState: "대여중", startDate: "2026.06.06", returnDate: "2026.06.15", paymentId: "PAY-202606-001", methodType: "카드", amount: "110,000원", damagedFee: "0원", overdueFee: "0원" },
   { rentalId: "R-202606-002", userId: "U-1002", productNumber: "PS-SP2-2310-001", productName: "마블 스파이더맨 2", orderState: "반납완료", startDate: "2026.06.01", returnDate: "2026.06.02", paymentId: "PAY-202606-002", methodType: "간편결제", amount: "3,000원", damagedFee: "0원", overdueFee: "0원" },
   { rentalId: "R-202606-003", userId: "U-1003", productNumber: "HAC-P-AXN7A", productName: "젤다의 전설: 티어스 오브 더 킹덤", orderState: "파손", startDate: "2026.06.03", returnDate: "2026.06.08", paymentId: "PAY-202606-003", methodType: "카드", amount: "17,500원", damagedFee: "35,000원", overdueFee: "0원" },
@@ -46,7 +46,7 @@ const adminRentals = [
   { rentalId: "R-202606-005", userId: "U-1001", productNumber: "SN-P2-2305-001", productName: "Sony PSVR 2", orderState: "연체", startDate: "2026.05.27", returnDate: "2026.06.05", paymentId: "PAY-202606-005", methodType: "간편결제", amount: "110,000원", damagedFee: "0원", overdueFee: "12,000원" }
 ];
 
-const adminInquiries = [
+let adminInquiries = [
   { inquiryId: "INQ-202606-001", userId: "U-1001", rentalId: "R-202606-001", text: "Meta Quest 3 컨트롤러 배터리가 빨리 닳는 것 같습니다.", answer: "예비 배터리와 교체 컨트롤러를 준비해두겠습니다.", status: "답변완료" },
   { inquiryId: "INQ-202606-002", userId: "U-1003", rentalId: "R-202606-003", text: "게임 칩 케이스 모서리가 깨져 있었는데 확인 부탁드립니다.", answer: "파손 접수 후 사진 확인 중입니다.", status: "처리중" },
   { inquiryId: "INQ-202606-003", userId: "U-1004", rentalId: "R-202606-004", text: "픽업 시간을 오후 7시로 변경할 수 있을까요?", answer: "", status: "답변대기" }
@@ -60,6 +60,13 @@ const adminEntities = [
   ["Payment", "Payment id (PK)", "method id, method type, amount"],
   ["Inquiry", "Inquiry id (PK)", "user id, rental id, text, answer, status"]
 ];
+
+const supabaseConfig = window.PLAYPICK_SUPABASE || {};
+const hasSupabaseConfig = Boolean(supabaseConfig.url && supabaseConfig.anonKey && window.supabase);
+const supabaseClient = hasSupabaseConfig
+  ? window.supabase.createClient(supabaseConfig.url, supabaseConfig.anonKey)
+  : null;
+const currentUserId = supabaseConfig.currentUserId || "U-1001";
 
 const pages = [...document.querySelectorAll("[data-page]")];
 const routeLinks = [...document.querySelectorAll("[data-route]")];
@@ -183,6 +190,148 @@ function statusClass(status) {
   return "";
 }
 
+function moneyNumber(value = "0") {
+  return Number(String(value).replace(/[^0-9]/g, "")) || 0;
+}
+
+function todayText() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function userRentals(userId = currentUserId) {
+  return adminRentals.filter((rental) => rental.userId === userId);
+}
+
+function normalizeProfile(row) {
+  return {
+    userId: row.user_id,
+    name: row.name,
+    email: row.email,
+    phone: row.phone,
+    birth: row.birth || "-",
+    createdAt: row.created_at ? row.created_at.slice(0, 10) : "-"
+  };
+}
+
+function normalizeRental(row, detail, payment) {
+  return {
+    rentalId: row.rental_id,
+    userId: row.user_id,
+    productNumber: detail?.product_number || "-",
+    productName: detail?.product_name || "-",
+    orderState: row.order_state,
+    startDate: row.start_date,
+    returnDate: row.return_date,
+    paymentId: row.payment_id || payment?.payment_id || "-",
+    methodType: payment?.method_type || "-",
+    amount: payment ? `${Number(payment.amount || 0).toLocaleString()}원` : "0원",
+    damagedFee: `${Number(detail?.damaged_fee || 0).toLocaleString()}원`,
+    overdueFee: `${Number(detail?.overdue_fee || 0).toLocaleString()}원`
+  };
+}
+
+function normalizeInquiry(row) {
+  return {
+    inquiryId: row.inquiry_id,
+    userId: row.user_id,
+    rentalId: row.rental_id,
+    text: row.text,
+    answer: row.answer || "",
+    status: row.status
+  };
+}
+
+async function loadDatabaseData() {
+  if (!supabaseClient) return;
+
+  try {
+    const [{ data: profiles }, { data: orders }, { data: details }, { data: payments }, { data: inquiries }] = await Promise.all([
+      supabaseClient.from("profiles").select("*"),
+      supabaseClient.from("rental_orders").select("*").order("created_at", { ascending: false }),
+      supabaseClient.from("rental_details").select("*"),
+      supabaseClient.from("payments").select("*"),
+      supabaseClient.from("inquiries").select("*").order("created_at", { ascending: false })
+    ]);
+
+    if (profiles?.length) adminUsers = profiles.map(normalizeProfile);
+    if (orders?.length) {
+      adminRentals = orders.map((order) => normalizeRental(
+        order,
+        details?.find((detail) => detail.rental_id === order.rental_id),
+        payments?.find((payment) => payment.payment_id === order.payment_id)
+      ));
+    }
+    if (inquiries?.length) adminInquiries = inquiries.map(normalizeInquiry);
+
+    renderAdminDashboard();
+    renderMyPage();
+    showToast("Supabase 데이터가 연결되었습니다.");
+  } catch (error) {
+    console.error(error);
+    showToast("Supabase 연결 전 샘플 데이터로 표시 중입니다.");
+  }
+}
+
+async function saveRentalToDatabase(form) {
+  if (!supabaseClient) return false;
+
+  const formData = new FormData(form);
+  const now = Date.now();
+  const rentalId = `R-${now}`;
+  const paymentId = `PAY-${now}`;
+  const userName = formData.get("name") || "PlayPICK 사용자";
+  const phone = formData.get("phone") || "";
+  const startDate = formData.get("pickupDate") || todayText();
+  const returnDate = startDate;
+  const amount = moneyNumber(selectedProduct.prices?.day || selectedProduct.price);
+  const productNumber = selectedProduct.code || selectedProduct.id;
+
+  const { error: profileError } = await supabaseClient.from("profiles").upsert({
+    user_id: currentUserId,
+    email: `${currentUserId.toLowerCase()}@playpick.local`,
+    name: userName,
+    phone,
+    birth: null
+  });
+  if (profileError) throw profileError;
+
+  const { error: orderError } = await supabaseClient.from("rental_orders").insert({
+    rental_id: rentalId,
+    user_id: currentUserId,
+    payment_id: null,
+    order_state: "결제완료",
+    start_date: startDate,
+    return_date: returnDate
+  });
+  if (orderError) throw orderError;
+
+  const { error: paymentError } = await supabaseClient.from("payments").insert({
+    payment_id: paymentId,
+    rental_id: rentalId,
+    method_id: "manual-demo",
+    method_type: "현장결제",
+    amount
+  });
+  if (paymentError) throw paymentError;
+
+  const { error: orderPaymentError } = await supabaseClient.from("rental_orders").update({
+    payment_id: paymentId
+  }).eq("rental_id", rentalId);
+  if (orderPaymentError) throw orderPaymentError;
+
+  const { error: detailError } = await supabaseClient.from("rental_details").insert({
+    rental_id: rentalId,
+    product_number: productNumber,
+    product_name: selectedProduct.name,
+    damaged_fee: 0,
+    overdue_fee: 0
+  });
+  if (detailError) throw detailError;
+
+  await loadDatabaseData();
+  return true;
+}
+
 function renderAdminDashboard() {
   const statTarget = document.querySelector(".admin-stat-grid");
   if (!statTarget) return;
@@ -244,6 +393,112 @@ function renderAdminDashboard() {
   }).join("");
 }
 
+function emptyRow(message, columns) {
+  return `<tr><td colspan="${columns}" class="empty-table-cell">${escapeHtml(message)}</td></tr>`;
+}
+
+function rentalRow(rental, mode) {
+  if (mode === "returned") {
+    return `
+      <tr>
+        <td><strong>${escapeHtml(rental.productName)}</strong><span>${escapeHtml(rental.productNumber)}</span></td>
+        <td><strong>${escapeHtml(rental.returnDate)}</strong><span>${escapeHtml(rental.rentalId)}</span></td>
+        <td><strong>${escapeHtml(rental.amount)}</strong><span>${escapeHtml(rental.methodType)}</span></td>
+        <td><span class="status-badge ${statusClass(rental.orderState)}">${escapeHtml(rental.orderState)}</span></td>
+      </tr>
+    `;
+  }
+
+  if (mode === "issue") {
+    const issueType = rental.orderState === "파손" ? "파손" : "연체";
+    return `
+      <tr>
+        <td><strong>${escapeHtml(rental.productName)}</strong><span>${escapeHtml(rental.productNumber)}</span></td>
+        <td><span class="status-badge ${statusClass(rental.orderState)}">${escapeHtml(issueType)}</span></td>
+        <td><strong>${escapeHtml(rental.returnDate)}</strong><span>${escapeHtml(rental.rentalId)}</span></td>
+        <td><strong>${escapeHtml(rental.overdueFee)}</strong></td>
+        <td><strong>${escapeHtml(rental.damagedFee)}</strong></td>
+      </tr>
+    `;
+  }
+
+  return `
+    <tr>
+      <td><strong>${escapeHtml(rental.productName)}</strong><span>${escapeHtml(rental.productNumber)}</span></td>
+      <td><span class="status-badge ${statusClass(rental.orderState)}">${escapeHtml(rental.orderState)}</span></td>
+      <td><strong>${escapeHtml(rental.startDate)}</strong><span>반납 예정 ${escapeHtml(rental.returnDate)}</span></td>
+      <td><strong>${escapeHtml(rental.amount)}</strong><span>${escapeHtml(rental.methodType)}</span></td>
+      <td><strong>연체 ${escapeHtml(rental.overdueFee)}</strong><span>파손 ${escapeHtml(rental.damagedFee)}</span></td>
+    </tr>
+  `;
+}
+
+function renderMyPage() {
+  const profileTarget = document.querySelector(".mypage-profile-card");
+  if (!profileTarget) return;
+
+  const user = adminUser(currentUserId);
+  const rentals = userRentals(currentUserId);
+  const currentRentals = rentals.filter((rental) => ["대여중", "결제완료", "연체"].includes(rental.orderState));
+  const returnedRentals = rentals.filter((rental) => rental.orderState === "반납완료");
+  const issueRentals = rentals.filter((rental) => rental.orderState === "연체" || rental.orderState === "파손" || moneyNumber(rental.overdueFee) > 0 || moneyNumber(rental.damagedFee) > 0);
+  const inquiries = adminInquiries.filter((inquiry) => inquiry.userId === currentUserId);
+
+  document.querySelector(".mypage-user-id").textContent = user.userId;
+  profileTarget.innerHTML = `
+    <article>
+      <span>이름</span>
+      <strong>${escapeHtml(user.name)}</strong>
+    </article>
+    <article>
+      <span>연락처</span>
+      <strong>${escapeHtml(user.phone)}</strong>
+    </article>
+    <article>
+      <span>이메일</span>
+      <strong>${escapeHtml(user.email)}</strong>
+    </article>
+    <article>
+      <span>가입일</span>
+      <strong>${escapeHtml(user.createdAt)}</strong>
+    </article>
+  `;
+
+  document.querySelector(".mypage-stat-grid").innerHTML = [
+    ["현재 대여", currentRentals.length],
+    ["반납 완료", returnedRentals.length],
+    ["연체/파손", issueRentals.length],
+    ["문의", inquiries.length]
+  ].map(([label, value]) => `
+    <article class="admin-stat-card">
+      <span>My Page</span>
+      <strong>${escapeHtml(value)}</strong>
+      <em>${escapeHtml(label)}</em>
+    </article>
+  `).join("");
+
+  document.querySelector(".mypage-current-rows").innerHTML = currentRentals.length
+    ? currentRentals.map((rental) => rentalRow(rental, "current")).join("")
+    : emptyRow("현재 빌리고 있는 상품이 없습니다.", 5);
+  document.querySelector(".mypage-returned-rows").innerHTML = returnedRentals.length
+    ? returnedRentals.map((rental) => rentalRow(rental, "returned")).join("")
+    : emptyRow("반납 완료 내역이 없습니다.", 4);
+  document.querySelector(".mypage-issue-rows").innerHTML = issueRentals.length
+    ? issueRentals.map((rental) => rentalRow(rental, "issue")).join("")
+    : emptyRow("연체/파손 내역이 없습니다.", 5);
+  document.querySelector(".mypage-inquiry-rows").innerHTML = inquiries.length
+    ? inquiries.map((inquiry) => `
+      <tr>
+        <td><strong>${escapeHtml(inquiry.inquiryId)}</strong></td>
+        <td><strong>${escapeHtml(inquiry.rentalId)}</strong></td>
+        <td>${escapeHtml(inquiry.text)}</td>
+        <td>${escapeHtml(inquiry.answer || "아직 답변이 등록되지 않았습니다.")}</td>
+        <td><span class="status-badge ${statusClass(inquiry.status)}">${escapeHtml(inquiry.status)}</span></td>
+      </tr>
+    `).join("")
+    : emptyRow("등록된 문의사항이 없습니다.", 5);
+}
+
 function renderDetail(product = selectedProduct) {
   selectedProduct = product;
   document.querySelector(".detail-image").src = product.image;
@@ -301,9 +556,16 @@ function showRentalComplete() {
   showToast("신청되었습니다!");
 }
 
-function submitRentalForm(form) {
+async function submitRentalForm(form) {
   if (!form.checkValidity()) {
     form.reportValidity();
+    return;
+  }
+  try {
+    await saveRentalToDatabase(form);
+  } catch (error) {
+    console.error(error);
+    showToast("DB 저장 실패: Supabase 설정을 확인해주세요.");
     return;
   }
   showRentalComplete();
@@ -347,8 +609,10 @@ window.addEventListener("hashchange", () => {
 renderProducts();
 renderSteps();
 renderAdminDashboard();
+renderMyPage();
 renderDetail(selectedProduct);
 setRoute(location.hash.slice(1) || "home", false);
+loadDatabaseData();
 
 document.querySelector("#product-search")?.addEventListener("input", filterSearch);
 

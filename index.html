@@ -404,12 +404,99 @@
     </section>
 
     <section class="page" id="page-mypage" data-page="mypage">
-      <section class="page-hero"><h1>마이페이지</h1><p>대여 내역과 회원 정보를 확인하는 영역입니다.</p></section>
-      <section class="wire-section dashboard-grid">
-        <article><strong>회원 정보 관리</strong><span>이름, 연락처, 주소 등</span></article>
-        <article><strong>대여 내역</strong><span>진행 중 / 완료 내역</span></article>
-        <article><strong>반납 내역</strong><span>반납 완료 내역</span></article>
-        <article><strong>연체/파손 내역</strong><span>연체료 / 파손비 확인</span></article>
+      <section class="page-hero mypage-hero"><h1>마이페이지</h1><p>내 대여 현황, 반납 내역, 연체/파손 정산 내역을 한 번에 확인하세요.</p></section>
+      <section class="wire-section mypage-profile">
+        <div class="section-title-row">
+          <h2>회원 정보</h2>
+          <span class="mypage-user-id">User ID</span>
+        </div>
+        <div class="mypage-profile-card"></div>
+      </section>
+      <section class="wire-section mypage-dashboard">
+        <div class="section-title-row">
+          <h2>내 대여 요약</h2>
+          <span>Rental Order Status</span>
+        </div>
+        <div class="mypage-stat-grid"></div>
+      </section>
+      <section class="wire-section mypage-table-section">
+        <div class="section-title-row">
+          <h2>현재 빌리고 있는 상품</h2>
+          <span>대여중 / 결제완료 / 연체</span>
+        </div>
+        <div class="admin-table-wrap">
+          <table class="admin-table mypage-table">
+            <thead>
+              <tr>
+                <th>상품</th>
+                <th>상태</th>
+                <th>대여 기간</th>
+                <th>결제</th>
+                <th>정산</th>
+              </tr>
+            </thead>
+            <tbody class="mypage-current-rows"></tbody>
+          </table>
+        </div>
+      </section>
+      <section class="wire-section mypage-table-section">
+        <div class="section-title-row">
+          <h2>반납 내역</h2>
+          <span>반납완료 주문</span>
+        </div>
+        <div class="admin-table-wrap">
+          <table class="admin-table mypage-table">
+            <thead>
+              <tr>
+                <th>상품</th>
+                <th>반납일</th>
+                <th>결제 금액</th>
+                <th>상태</th>
+              </tr>
+            </thead>
+            <tbody class="mypage-returned-rows"></tbody>
+          </table>
+        </div>
+      </section>
+      <section class="wire-section mypage-table-section">
+        <div class="section-title-row">
+          <h2>연체/파손 내역</h2>
+          <span>Overdue fee / Damaged fee</span>
+        </div>
+        <div class="admin-table-wrap">
+          <table class="admin-table mypage-table">
+            <thead>
+              <tr>
+                <th>상품</th>
+                <th>구분</th>
+                <th>예정 반납일</th>
+                <th>연체료</th>
+                <th>파손비</th>
+              </tr>
+            </thead>
+            <tbody class="mypage-issue-rows"></tbody>
+          </table>
+        </div>
+      </section>
+      <section class="wire-section mypage-table-section">
+        <div class="section-title-row">
+          <h2>내 문의사항</h2>
+          <span>Inquiry Status</span>
+        </div>
+        <div class="admin-table-wrap">
+          <table class="admin-table mypage-table">
+            <thead>
+              <tr>
+                <th>문의번호</th>
+                <th>주문번호</th>
+                <th>문의 내용</th>
+                <th>답변</th>
+                <th>상태</th>
+              </tr>
+            </thead>
+            <tbody class="mypage-inquiry-rows"></tbody>
+          </table>
+        </div>
       </section>
     </section>
 
@@ -517,6 +604,8 @@
   </footer>
 
   <div class="toast" role="status" aria-live="polite"></div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="assets/supabase-config.js?v=1"></script>
   <script src="assets/products.generated.js?v=1"></script>
   <script src="script.js?v=5"></script>
 </body>
