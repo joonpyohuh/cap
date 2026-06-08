@@ -31,6 +31,36 @@ const serviceSteps = [
   ["결제 진행", "결제 방법 및 결제 수단", "icon-card"]
 ];
 
+const adminUsers = [
+  { userId: "U-1001", name: "김민지", email: "minji@playpick.kr", phone: "010-3482-1900", birth: "1998.04.12", createdAt: "2026.05.18" },
+  { userId: "U-1002", name: "박도윤", email: "doyun@playpick.kr", phone: "010-7744-2201", birth: "2001.09.07", createdAt: "2026.05.22" },
+  { userId: "U-1003", name: "이서연", email: "seoyeon@playpick.kr", phone: "010-9013-4472", birth: "1997.12.03", createdAt: "2026.05.28" },
+  { userId: "U-1004", name: "최준호", email: "junho@playpick.kr", phone: "010-5520-1188", birth: "1999.02.19", createdAt: "2026.06.01" }
+];
+
+const adminRentals = [
+  { rentalId: "R-202606-001", userId: "U-1001", productNumber: "MQ-03-2312-001", productName: "Meta Quest 3", orderState: "대여중", startDate: "2026.06.06", returnDate: "2026.06.15", paymentId: "PAY-202606-001", methodType: "카드", amount: "110,000원", damagedFee: "0원", overdueFee: "0원" },
+  { rentalId: "R-202606-002", userId: "U-1002", productNumber: "PS-SP2-2310-001", productName: "마블 스파이더맨 2", orderState: "반납완료", startDate: "2026.06.01", returnDate: "2026.06.02", paymentId: "PAY-202606-002", methodType: "간편결제", amount: "3,000원", damagedFee: "0원", overdueFee: "0원" },
+  { rentalId: "R-202606-003", userId: "U-1003", productNumber: "HAC-P-AXN7A", productName: "젤다의 전설: 티어스 오브 더 킹덤", orderState: "파손", startDate: "2026.06.03", returnDate: "2026.06.08", paymentId: "PAY-202606-003", methodType: "카드", amount: "17,500원", damagedFee: "35,000원", overdueFee: "0원" },
+  { rentalId: "R-202606-004", userId: "U-1004", productNumber: "HEG-001-01", productName: "닌텐도 스위치 OLED 모델", orderState: "결제완료", startDate: "2026.06.10", returnDate: "2026.06.25", paymentId: "PAY-202606-004", methodType: "카드", amount: "72,000원", damagedFee: "0원", overdueFee: "0원" },
+  { rentalId: "R-202606-005", userId: "U-1001", productNumber: "SN-P2-2305-001", productName: "Sony PSVR 2", orderState: "연체", startDate: "2026.05.27", returnDate: "2026.06.05", paymentId: "PAY-202606-005", methodType: "간편결제", amount: "110,000원", damagedFee: "0원", overdueFee: "12,000원" }
+];
+
+const adminInquiries = [
+  { inquiryId: "INQ-202606-001", userId: "U-1001", rentalId: "R-202606-001", text: "Meta Quest 3 컨트롤러 배터리가 빨리 닳는 것 같습니다.", answer: "예비 배터리와 교체 컨트롤러를 준비해두겠습니다.", status: "답변완료" },
+  { inquiryId: "INQ-202606-002", userId: "U-1003", rentalId: "R-202606-003", text: "게임 칩 케이스 모서리가 깨져 있었는데 확인 부탁드립니다.", answer: "파손 접수 후 사진 확인 중입니다.", status: "처리중" },
+  { inquiryId: "INQ-202606-003", userId: "U-1004", rentalId: "R-202606-004", text: "픽업 시간을 오후 7시로 변경할 수 있을까요?", answer: "", status: "답변대기" }
+];
+
+const adminEntities = [
+  ["User", "User id (PK)", "email, password, name, phone, birth, created_at"],
+  ["Product", "Product number (PK)", "category, brand, model, platform, features, inventory quantity"],
+  ["Rental Order", "Rental id (PK)", "user id (FK), order state, start date, return date"],
+  ["Rental Detail", "Rental id + Product number", "product number (FK), damaged fee, overdue fee"],
+  ["Payment", "Payment id (PK)", "method id, method type, amount"],
+  ["Inquiry", "Inquiry id (PK)", "user id, rental id, text, answer, status"]
+];
+
 const pages = [...document.querySelectorAll("[data-page]")];
 const routeLinks = [...document.querySelectorAll("[data-route]")];
 const header = document.querySelector(".site-header");
@@ -141,6 +171,79 @@ function renderSteps() {
   document.querySelector(".service-steps").innerHTML = serviceSteps.map(processStep).join("");
 }
 
+function adminUser(userId) {
+  return adminUsers.find((user) => user.userId === userId) || { userId, name: "미확인 사용자", email: "-", phone: "-" };
+}
+
+function statusClass(status) {
+  if (["대여중", "처리중", "연체"].includes(status)) return "is-active";
+  if (["반납완료", "답변완료"].includes(status)) return "is-done";
+  if (["파손"].includes(status)) return "is-danger";
+  if (["답변대기", "결제완료"].includes(status)) return "is-waiting";
+  return "";
+}
+
+function renderAdminDashboard() {
+  const statTarget = document.querySelector(".admin-stat-grid");
+  if (!statTarget) return;
+
+  const activeCount = adminRentals.filter((rental) => rental.orderState === "대여중").length;
+  const returnedCount = adminRentals.filter((rental) => rental.orderState === "반납완료").length;
+  const damagedCount = adminRentals.filter((rental) => rental.orderState === "파손").length;
+  const pendingInquiryCount = adminInquiries.filter((inquiry) => inquiry.status !== "답변완료").length;
+  const productCount = products.length;
+
+  statTarget.innerHTML = [
+    ["전체 상품", productCount, "Product"],
+    ["대여중", activeCount, "Rental Order"],
+    ["반납완료", returnedCount, "Rental Detail"],
+    ["파손 접수", damagedCount, "Damaged fee"],
+    ["문의 대기", pendingInquiryCount, "Inquiry"]
+  ].map(([label, value, entity]) => `
+    <article class="admin-stat-card">
+      <span>${escapeHtml(entity)}</span>
+      <strong>${escapeHtml(value)}</strong>
+      <em>${escapeHtml(label)}</em>
+    </article>
+  `).join("");
+
+  document.querySelector(".admin-entity-grid").innerHTML = adminEntities.map(([name, key, attrs]) => `
+    <article class="admin-entity-card">
+      <span>${escapeHtml(key)}</span>
+      <strong>${escapeHtml(name)}</strong>
+      <p>${escapeHtml(attrs)}</p>
+    </article>
+  `).join("");
+
+  document.querySelector(".admin-rental-rows").innerHTML = adminRentals.map((rental) => {
+    const user = adminUser(rental.userId);
+    return `
+      <tr>
+        <td><strong>${escapeHtml(rental.rentalId)}</strong><span>${escapeHtml(rental.paymentId)}</span></td>
+        <td><strong>${escapeHtml(user.name)}</strong><span>${escapeHtml(user.userId)} · ${escapeHtml(user.phone)}</span></td>
+        <td><strong>${escapeHtml(rental.productName)}</strong><span>${escapeHtml(rental.productNumber)}</span></td>
+        <td><span class="status-badge ${statusClass(rental.orderState)}">${escapeHtml(rental.orderState)}</span></td>
+        <td><strong>${escapeHtml(rental.startDate)}</strong><span>반납 예정 ${escapeHtml(rental.returnDate)}</span></td>
+        <td><strong>${escapeHtml(rental.amount)}</strong><span>${escapeHtml(rental.methodType)}</span></td>
+        <td><strong>파손 ${escapeHtml(rental.damagedFee)}</strong><span>연체 ${escapeHtml(rental.overdueFee)}</span></td>
+      </tr>
+    `;
+  }).join("");
+
+  document.querySelector(".admin-inquiry-rows").innerHTML = adminInquiries.map((inquiry) => {
+    const user = adminUser(inquiry.userId);
+    return `
+      <tr>
+        <td><strong>${escapeHtml(inquiry.inquiryId)}</strong></td>
+        <td><strong>${escapeHtml(user.name)}</strong><span>${escapeHtml(inquiry.rentalId)}</span></td>
+        <td>${escapeHtml(inquiry.text)}</td>
+        <td>${escapeHtml(inquiry.answer || "아직 답변이 등록되지 않았습니다.")}</td>
+        <td><span class="status-badge ${statusClass(inquiry.status)}">${escapeHtml(inquiry.status)}</span></td>
+      </tr>
+    `;
+  }).join("");
+}
+
 function renderDetail(product = selectedProduct) {
   selectedProduct = product;
   document.querySelector(".detail-image").src = product.image;
@@ -243,6 +346,7 @@ window.addEventListener("hashchange", () => {
 
 renderProducts();
 renderSteps();
+renderAdminDashboard();
 renderDetail(selectedProduct);
 setRoute(location.hash.slice(1) || "home", false);
 

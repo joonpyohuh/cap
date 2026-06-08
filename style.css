@@ -181,6 +181,14 @@ svg {
   width: 2rem;
 }
 
+.admin-mode-link {
+  color: #0a4ecb;
+}
+
+.admin-mode-link svg {
+  color: var(--blue);
+}
+
 main {
   min-height: 58vh;
 }
@@ -750,6 +758,150 @@ main {
   line-height: 1.5;
 }
 
+.admin-hero {
+  background: linear-gradient(135deg, #f7fbff, #ffffff 58%, #fff9d7);
+}
+
+.admin-stat-grid,
+.admin-entity-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.admin-stat-grid {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.admin-entity-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.admin-stat-card,
+.admin-entity-card {
+  background: #ffffff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  display: grid;
+  gap: 0.45rem;
+  min-height: 8.25rem;
+  padding: 1rem;
+}
+
+.admin-stat-card span,
+.admin-entity-card span {
+  color: var(--blue);
+  font-size: 0.78rem;
+  font-weight: 950;
+}
+
+.admin-stat-card strong {
+  color: #111827;
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1;
+}
+
+.admin-stat-card em {
+  color: var(--muted);
+  font-style: normal;
+  font-weight: 900;
+}
+
+.admin-entity-card strong {
+  color: #111827;
+  font-size: 1.25rem;
+  font-weight: 950;
+}
+
+.admin-entity-card p {
+  color: var(--muted);
+  font-size: 0.92rem;
+  font-weight: 800;
+  line-height: 1.45;
+  margin: 0;
+}
+
+.admin-table-wrap {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow-x: auto;
+}
+
+.admin-table {
+  border-collapse: collapse;
+  min-width: 980px;
+  width: 100%;
+}
+
+.admin-table th,
+.admin-table td {
+  border-bottom: 1px solid var(--line);
+  padding: 1rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.admin-table th {
+  background: #f5f8fc;
+  color: #4b5563;
+  font-size: 0.82rem;
+  font-weight: 950;
+}
+
+.admin-table td {
+  color: #111827;
+  font-size: 0.92rem;
+  font-weight: 800;
+  line-height: 1.45;
+}
+
+.admin-table td strong,
+.admin-table td span {
+  display: block;
+}
+
+.admin-table td span {
+  color: var(--muted);
+  font-size: 0.82rem;
+  margin-top: 0.25rem;
+}
+
+.status-badge {
+  align-items: center;
+  border: 1px solid #c8d4e6;
+  border-radius: 999px;
+  color: #536070;
+  display: inline-flex;
+  font-size: 0.78rem;
+  font-weight: 950;
+  justify-content: center;
+  min-width: 5rem;
+  padding: 0.35rem 0.65rem;
+}
+
+.status-badge.is-active {
+  background: #eef6ff;
+  border-color: #9ec8ff;
+  color: #0754c7;
+}
+
+.status-badge.is-done {
+  background: #edfdf5;
+  border-color: #9ee7c3;
+  color: #087647;
+}
+
+.status-badge.is-danger {
+  background: #fff1f1;
+  border-color: #ffb9b9;
+  color: #d21f2b;
+}
+
+.status-badge.is-waiting {
+  background: #fff9df;
+  border-color: #f3dc82;
+  color: #8a6500;
+}
+
 .guide-cards {
   display: grid;
   gap: 4rem;
@@ -1300,6 +1452,8 @@ main {
   .icon-info-grid,
   .dashboard-grid,
   .support-grid,
+  .admin-stat-grid,
+  .admin-entity-grid,
   .product-detail-shell {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -1405,6 +1559,8 @@ main {
   .recommend-grid,
   .service-card-grid,
   .icon-info-grid,
+  .admin-stat-grid,
+  .admin-entity-grid,
   .prep-grid > div,
   .dashboard-grid,
   .support-grid,
