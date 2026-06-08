@@ -521,7 +521,7 @@ function renderDetail(product = selectedProduct) {
   document.querySelector(".rental-form")?.reset();
 }
 
-function setRoute(route, shouldScroll = true) {
+function setRoute(route, shouldScroll = false) {
   const safeRoute = document.querySelector(`[data-page="${route}"]`) ? route : "home";
   pages.forEach((page) => page.classList.toggle("active", page.dataset.page === safeRoute));
   routeLinks.forEach((link) => link.classList.toggle("active", link.dataset.route === safeRoute));
@@ -565,7 +565,7 @@ async function submitRentalForm(form) {
     await saveRentalToDatabase(form);
   } catch (error) {
     console.error(error);
-    showToast("DB 저장 실패: Supabase 설정을 확인해주세요.");
+    showToast(error?.message || "DB 저장 실패: Supabase 정책을 확인해주세요.");
     return;
   }
   showRentalComplete();

@@ -43,6 +43,10 @@ window.PLAYPICK_SUPABASE = {
 
 연결되면 대여 신청 시 `profiles`, `rental_orders`, `rental_details`, `payments` 테이블에 실제 데이터가 저장됩니다. 마이페이지와 관리자 모드는 Supabase 데이터를 우선으로 불러오고, 설정이 비어 있으면 샘플 데이터로 표시됩니다.
 
+### 저장 실패가 뜰 때
+
+`new row violates row-level security policy` 또는 `DB 저장 실패`가 뜨면 Supabase SQL Editor에서 `database/fix-rls-policies.sql` 전체를 실행합니다. 이 파일은 `rental_orders`, `rental_details`, `payments`, `inquiries`에 공개 데모용 읽기/쓰기 정책을 다시 생성합니다.
+
 ## Supabase 테이블
 
 - `profiles`: 사용자 정보
